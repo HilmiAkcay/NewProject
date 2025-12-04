@@ -11,4 +11,7 @@ public class AccountAddress : EntityBase
     public string? State { get; set; }
     public string? Country { get; set; }
     public string? PostalCode { get; set; }
+
+    // Navigation
+    public Account? Account { get; set; }
 }

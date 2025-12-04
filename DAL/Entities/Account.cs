@@ -2,8 +2,8 @@
 
 public class Account : EntityBase
 {
-    public string Code { get; set; }
-    public string Name { get; set; }
+    public string Code { get; set; } = default!;
+    public string Name { get; set; } = default!;
     public string? TaxNumber { get; set; }
     public string? VATNumber { get; set; }
     public string Currency { get; set; } = "USD";
@@ -11,4 +11,11 @@ public class Account : EntityBase
     public string? IBAN { get; set; }
     public string? BankName { get; set; }
     public bool TaxExempt { get; set; }
+
+    // Navigation
+    public ICollection<PurchasePrice> PurchasePrices { get; set; } = new List<PurchasePrice>();
+    public ICollection<AccountContact> Contacts { get; set; } = new List<AccountContact>();
+    public ICollection<AccountAddress> Addresses { get; set; } = new List<AccountAddress>();
+    public ICollection<AccountGroupAccount> AccountGroupAccounts { get; set; } = new List<AccountGroupAccount>();
+    public ICollection<PriceRuleAssignment> PriceRuleAssignments { get; set; } = new List<PriceRuleAssignment>();
 }

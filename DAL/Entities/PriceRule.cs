@@ -13,4 +13,6 @@ public class PriceRule : EntityBase
     public bool ApplyOnGrossPrice { get; set; }
     public DateTime ValidFrom { get; set; }
     public DateTime? ValidTo { get; set; }
+    public TaxRate? TaxRate { get; set; }
+    public ICollection<PriceRuleAssignment> PriceRuleAssignments { get; set; } = new List<PriceRuleAssignment>();
 }
