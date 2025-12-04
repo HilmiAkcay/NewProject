@@ -19,15 +19,15 @@ erDiagram
 
     PRODUCTGROUP { int Id PK string Name }
 
-    TAXRATE { int Id PK string Code string Name int Rate DateTime ValidFrom DateTime ValidTo_nullable }
+    TAXRATE { int Id PK string Code string Name int Rate DateTime ValidFrom DateTime ValidTo "nullable" }
 
-    PURCHASEPRICE { int Id PK int ProductUnitId int VendorId decimal Price string Currency DateTime ValidFrom DateTime ValidTo_nullable int TaxRateId bool IsGrossPrice }
+    PURCHASEPRICE { int Id PK int ProductUnitId int VendorId decimal Price string Currency DateTime ValidFrom DateTime ValidTo "nullable" int TaxRateId bool IsGrossPrice }
 
-    SALESPRICE { int Id PK int ProductUnitId decimal Price string Currency DateTime ValidFrom DateTime ValidTo_nullable int TaxRateId int IsGrossPrice }
+    SALESPRICE { int Id PK int ProductUnitId decimal Price string Currency DateTime ValidFrom DateTime ValidTo "nullable" int TaxRateId int IsGrossPrice }
 
-    PRICERULE { int Id PK string Name string Description byte RuleType decimal DiscountPercent decimal DiscountAmount decimal FixedPrice decimal MarginPercent int TaxRateId bool ApplyOnGrossPrice DateTime ValidFrom DateTime ValidTo_nullable }
+    PRICERULE { int Id PK string Name string Description byte RuleType decimal DiscountPercent decimal DiscountAmount decimal FixedPrice decimal MarginPercent int TaxRateId bool ApplyOnGrossPrice DateTime ValidFrom DateTime ValidTo "nullable" }
 
-    PRICERULEASSIGNMENT { int Id PK int PriceRuleId int ProductId_nullable int ProductGroupId_nullable int CustomerId_nullable int CustomerGroupId_nullable int ProductUnitId_nullable }
+    PRICERULEASSIGNMENT { int Id PK int PriceRuleId int ProductId "nullable" int ProductGroupId "nullable" int CustomerId "nullable" int CustomerGroupId "nullable" int ProductUnitId "nullable" }
 
     CUSTOMER { int Id PK string Name int TaxExempt }
 
