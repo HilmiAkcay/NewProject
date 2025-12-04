@@ -1,11 +1,10 @@
-﻿namespace NewDAL.Entities
+﻿namespace DAL.Entities;
+
+public class Product : EntityBase
 {
-    public class Product : EntityBase
-    {
-        public string Name { get; set; }
-        public int ProductGroupId { get; set; }
-        public int DefaultPuId { get; set; }
-        public int DefaultTaxRateId { get; set; }
-        public string SKU { get; set; }
-    }
+    public string Name { get; set; }
+    public int ProductGroupId { get; set; }
+    public int DefaultPuId { get; set; }
+    public int DefaultTaxRateId { get; set; }
+    public string SKU { get; set; }
 }

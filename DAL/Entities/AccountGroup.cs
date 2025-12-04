@@ -1,8 +1,7 @@
 ﻿namespace NewDAL.Entities
 {
-    public class Customer : EntityBase
+    public class AccountGroup : EntityBase
     {
         public string Name { get; set; }
-        public int TaxExempt { get; set; }
     }
 }

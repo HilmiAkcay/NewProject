@@ -1,7 +1,6 @@
-﻿namespace NewDAL.Entities
+﻿namespace DAL.Entities;
+
+public class ProductGroup : EntityBase
 {
-    public class ProductGroup : EntityBase
-    {
-        public string Name { get; set; }
-    }
+    public string Name { get; set; }
 }

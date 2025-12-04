@@ -1,8 +1,7 @@
-﻿namespace NewDAL.Entities
+﻿namespace DAL.Entities;
+public class Unit : EntityBase
 {
-    public class Unit : EntityBase
-    {
-        public string Code { get; set; }
-        public string Name { get; set; }
-    }
+    public string Code { get; set; }
+    public string Name { get; set; }
+}
 }
