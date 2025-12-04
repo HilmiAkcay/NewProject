@@ -1,7 +1,6 @@
-﻿namespace NewDAL.Entities
+﻿namespace DAL.Entities;
+public class AccountGroup : EntityBase
 {
-    public class AccountGroup : EntityBase
-    {
-        public string Name { get; set; }
-    }
+    public string Name { get; set; }
 }
+
