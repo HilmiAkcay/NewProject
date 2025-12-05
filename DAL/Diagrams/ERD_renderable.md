@@ -24,7 +24,7 @@ erDiagram
 
     PRODUCTGROUP { int Id PK string Name }
 
-    TAXRATE { int Id PK string Code string Name int Rate DateTime ValidFrom DateTime? ValidTo }
+    TAXRATE { int Id PK string Code string Name int Rate DateTime ValidFrom DateTime ValidTo "Nullable"}
 
     PURCHASEPRICE {
         int Id PK
@@ -33,7 +33,7 @@ erDiagram
         decimal Price
         int CurrencyId
         DateTime ValidFrom
-        DateTime? ValidTo
+        DateTime ValidTo "Nullable"
         int TaxRateId
         bool IsGrossPrice
     }
@@ -44,7 +44,7 @@ erDiagram
         decimal Price
         int CurrencyId
         DateTime ValidFrom
-        DateTime? ValidTo
+        DateTime ValidTo "Nullable"
         int TaxRateId
         bool IsGrossPrice
     }
@@ -61,30 +61,30 @@ erDiagram
         int TaxRateId
         bool ApplyOnGrossPrice
         DateTime ValidFrom
-        DateTime? ValidTo
+        DateTime ValidTo "Nullable"
     }
 
     PRICERULEASSIGNMENT {
         int Id PK
         int PriceRuleId
-        int? ProductUnitId
-        int? ProductId
-        int? AccountId
-        int? AccountGroupId
-        decimal? FixedPrice
-        decimal? DiscountPercent
+        int ProductUnitId "Nullable"
+        int ProductId "Nullable"
+        int AccountId "Nullable"
+        int AccountGroupId "Nullable"
+        decimal FixedPrice "Nullable"
+        decimal DiscountPercent "Nullable"
     }
 
     ACCOUNT {
         int Id PK
         string Code
         string Name
-        string? TaxNumber
-        string? VATNumber
+        string TaxNumber "Nullable"
+        string VATNumber "Nullable" 
         int CurrencyId
         int PaymentTermDays
-        string? IBAN
-        string? BankName
+        string IBAN "Nullable"
+        string BankName "Nullable"
         bool TaxExempt
     }
 
@@ -95,10 +95,10 @@ erDiagram
     ACCOUNTCONTACT {
         int Id PK
         int AccountId
-        string? ContactName
-        string? Email
-        string? Phone
-        string? ContactType
+        string ContactName
+        string Email
+        string Phone
+        string ContactType
     }
 
     ACCOUNTADDRESS {
@@ -106,11 +106,11 @@ erDiagram
         int AccountId
         string AddressType
         string AddressLine1
-        string? AddressLine2
-        string? City
-        string? State
+        string AddressLine2
+        string City
+        string State
         int CountryId
-        string? PostalCode
+        string PostalCode
     }
 
     CURRENCY { int Id PK string Code string Name }
