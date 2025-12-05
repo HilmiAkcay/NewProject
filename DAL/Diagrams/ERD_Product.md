@@ -1,0 +1,61 @@
+﻿# Product ERD
+```mermaid
+erDiagram
+    PRODUCT {
+        int Id PK
+        string Name
+        int ProductGroupId
+        int DefaultPuId
+        int DefaultTaxRateId
+        string SKU
+    }
+
+    PRODUCTUNIT {
+        int Id PK
+        int ProductId
+        int UnitId
+        int Factor
+    }
+
+    UNIT { int Id PK string Code string Name }
+
+    PRODUCTGROUP { int Id PK string Name }
+
+    TAXRATE { int Id PK string Code string Name int Rate DateTime ValidFrom DateTime ValidTo "Nullable"}
+
+    PURCHASEPRICE {
+        int Id PK
+        int ProductUnitId
+        int AccountId
+        decimal Price
+        int CurrencyId
+        DateTime ValidFrom
+        DateTime ValidTo "Nullable"
+        int TaxRateId
+        bool IsGrossPrice
+    }
+
+    SALESPRICE {
+        int Id PK
+        int ProductUnitId
+        decimal Price
+        int CurrencyId
+        DateTime ValidFrom
+        DateTime ValidTo "Nullable"
+        int TaxRateId
+        bool IsGrossPrice
+    }
+
+    PRODUCT ||--o{ PRODUCTGROUP : "ProductGroupId"
+    PRODUCT ||--|| PRODUCTUNIT : "DefaultPuId"
+    PRODUCT ||--o{ TAXRATE : "DefaultTaxRateId"
+
+    PRODUCTUNIT }|..|| UNIT : "UnitId"
+    PRODUCTUNIT ||--o{ PRODUCT : "ProductId"
+
+    PURCHASEPRICE ||--o{ TAXRATE : "TaxRateId"
+
+    PRODUCTUNIT ||--o{ PURCHASEPRICE : "ProductUnitId"
+    PRODUCTUNIT ||--o{ SALESPRICE : "ProductUnitId"
+    
+    SALESPRICE ||--o{ TAXRATE : "TaxRateId"
