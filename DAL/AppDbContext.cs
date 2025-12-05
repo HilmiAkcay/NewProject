@@ -11,7 +11,7 @@ public class AppDbContext : DbContext
 
     public DbSet<Product> Products { get; set; } = null!;
     public DbSet<ProductGroup> ProductGroups { get; set; } = null!;
-    public DbSet<ProducUnit> ProductUnits { get; set; } = null!;
+    public DbSet<ProductUnit> ProductUnits { get; set; } = null!;
     public DbSet<Unit> Units { get; set; } = null!;
     public DbSet<TaxRate> TaxRates { get; set; } = null!;
     public DbSet<PurchasePrice> PurchasePrices { get; set; } = null!;
@@ -30,7 +30,7 @@ public class AppDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         // ProducUnit -> Product (one-to-many)
-        modelBuilder.Entity<ProducUnit>(b =>
+        modelBuilder.Entity<ProductUnit>(b =>
         {
             b.HasOne(pu => pu.Product)
                 .WithMany(p => p.ProductUnits)

@@ -9,9 +9,10 @@ public class AccountAddress : EntityBase
     public string? AddressLine2 { get; set; }
     public string? City { get; set; }
     public string? State { get; set; }
-    public string? Country { get; set; }
+    public int CountryId { get; set; } = default!;
     public string? PostalCode { get; set; }
 
     // Navigation
     public Account? Account { get; set; }
+    public Country Country { get; set; } = default!;
 }

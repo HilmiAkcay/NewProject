@@ -1,6 +1,6 @@
 ﻿namespace DAL.Entities;
 
-public class ProducUnit : EntityBase
+public class ProductUnit : EntityBase
 {
     public int ProductId { get; set; }
     public int UnitId { get; set; }
