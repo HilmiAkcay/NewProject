@@ -5,7 +5,7 @@ erDiagram
         int Id PK
         string Name
         int ProductGroupId
-        int DefaultPuId
+        int DefaultProductUnitId
         int DefaultTaxRateId
         string SKU
     }
@@ -14,14 +14,28 @@ erDiagram
         int Id PK
         int ProductId
         int UnitId
-        int Factor
+        int Multiplier
     }
 
-    UNIT { int Id PK string Code string Name }
+    UNIT { 
+        int Id PK 
+        string Code 
+        string Name 
+    }
 
-    PRODUCTGROUP { int Id PK string Name }
+    PRODUCTGROUP { 
+        int Id PK 
+        string Name 
+    }
 
-    TAXRATE { int Id PK string Code string Name int Rate DateTime ValidFrom DateTime ValidTo "Nullable"}
+    TAXRATE { 
+        int Id PK 
+        string Code 
+        string Name 
+        int Rate DateTime 
+        ValidFrom DateTime 
+        ValidTo "Nullable"
+   }
 
     PURCHASEPRICE {
         int Id PK
@@ -46,16 +60,18 @@ erDiagram
         bool IsGrossPrice
     }
 
-    PRODUCT ||--o{ PRODUCTGROUP : "ProductGroupId"
-    PRODUCT ||--|| PRODUCTUNIT : "DefaultPuId"
-    PRODUCT ||--o{ TAXRATE : "DefaultTaxRateId"
-
-    PRODUCTUNIT }|..|| UNIT : "UnitId"
-    PRODUCTUNIT ||--o{ PRODUCT : "ProductId"
-
-    PURCHASEPRICE ||--o{ TAXRATE : "TaxRateId"
-
-    PRODUCTUNIT ||--o{ PURCHASEPRICE : "ProductUnitId"
-    PRODUCTUNIT ||--o{ SALESPRICE : "ProductUnitId"
+    PRODUCTGROUP ||--|{ PRODUCT : "ProductGroupId"
     
-    SALESPRICE ||--o{ TAXRATE : "TaxRateId"
+    PRODUCT ||--|| PRODUCTUNIT : "DefaultProductUnitId"
+    PRODUCT ||--|{ PRODUCTUNIT : "ProductId"
+    PRODUCT ||--|| TAXRATE : "DefaultTaxRateId"
+
+    UNIT ||--|{ PRODUCTUNIT : "UnitId"
+
+    TAXRATE ||--|{ SALESPRICE : "TaxRateId"
+    TAXRATE ||--|{ PURCHASEPRICE : "TaxRateId"
+
+
+    PRODUCTUNIT ||--|{ PURCHASEPRICE : "ProductUnitId"
+    PRODUCTUNIT ||--|{ SALESPRICE : "ProductUnitId"
+    
