@@ -124,12 +124,13 @@ erDiagram
     PRODUCTUNIT }|..|| UNIT : "UnitId"
     PRODUCTUNIT ||--o{ PRODUCT : "ProductId"
 
-    PURCHASEPRICE ||--|| PRODUCTUNIT : "ProductUnitId"
     PURCHASEPRICE ||--o{ TAXRATE : "TaxRateId"
     PURCHASEPRICE ||--o{ ACCOUNT : "AccountId"
     PURCHASEPRICE ||--o{ CURRENCY : "CurrencyId"
 
-    SALESPRICE ||--|| PRODUCTUNIT : "ProductUnitId"
+    PRODUCTUNIT ||--o{ PURCHASEPRICE : "ProductUnitId"
+    PRODUCTUNIT ||--o{ SALESPRICE : "ProductUnitId"
+    
     SALESPRICE ||--o{ TAXRATE : "TaxRateId"
     SALESPRICE ||--o{ CURRENCY : "CurrencyId"
 
