@@ -12,6 +12,7 @@ erDiagram
         int Id PK
         int ProductId
         int UnitId
+        int BaseUnitId
         int Multiplier
         bool IsDefault
     }
@@ -72,6 +73,7 @@ erDiagram
     PRODUCT ||--|{ PRODUCTUNIT : "ProductId"
 
     UNIT ||--|{ PRODUCTUNIT : "UnitId"
+    UNIT ||--|{ PRODUCTUNIT : "BaseUnitId"
 
     TAXRATE ||--|{ SALESPRICE : "TaxRateId"
     TAXRATE ||--|{ PURCHASEPRICE : "TaxRateId"
