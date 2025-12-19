@@ -68,7 +68,7 @@ erDiagram
     }
 
     PRODUCTGROUP ||--|{ PRODUCT : "ProductGroupId"
-    PRODUCUNIT ||--|{ PRODUCTBARCODE : "ProductUnitId"
+    PRODUCTUNIT ||--|{ PRODUCTBARCODE : "ProductUnitId"
     
     PRODUCT ||--|| PRODUCTUNIT : "DefaultProductUnitId"
     PRODUCT ||--|{ PRODUCTUNIT : "ProductId"
