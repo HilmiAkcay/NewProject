@@ -32,9 +32,9 @@ erDiagram
         int Id PK 
         string Code 
         string Name 
-        int Rate DateTime 
+        decimal Rate 
         ValidFrom DateTime 
-        ValidTo "Nullable"
+        DateTime ValidTo "Nullable"
    }
 
     PURCHASEPRICE {
