@@ -5,8 +5,6 @@ erDiagram
         int Id PK
         string Name
         int ProductGroupId
-        int DefaultProductUnitId
-        int DefaultTaxRateId
         string SKU
     }
 
@@ -15,6 +13,7 @@ erDiagram
         int ProductId
         int UnitId
         int Multiplier
+        bool IsDefault
     }
 
     UNIT { 
@@ -70,9 +69,7 @@ erDiagram
     PRODUCTGROUP ||--|{ PRODUCT : "ProductGroupId"
     PRODUCTUNIT ||--|{ PRODUCTBARCODE : "ProductUnitId"
     
-    PRODUCT ||--|| PRODUCTUNIT : "DefaultProductUnitId"
     PRODUCT ||--|{ PRODUCTUNIT : "ProductId"
-    PRODUCT ||--|| TAXRATE : "DefaultTaxRateId"
 
     UNIT ||--|{ PRODUCTUNIT : "UnitId"
 
