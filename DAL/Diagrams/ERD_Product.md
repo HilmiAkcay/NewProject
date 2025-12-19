@@ -60,7 +60,15 @@ erDiagram
         bool IsGrossPrice
     }
 
+    PRODUCTBARCODE{
+        int Id PK
+        int ProductUnitId
+        string Barcode
+        bool IsDefault
+    }
+
     PRODUCTGROUP ||--|{ PRODUCT : "ProductGroupId"
+    PRODUCUNIT ||--|{ PRODUCTBARCODE : "ProductUnitId"
     
     PRODUCT ||--|| PRODUCTUNIT : "DefaultProductUnitId"
     PRODUCT ||--|{ PRODUCTUNIT : "ProductId"
