@@ -7,11 +7,18 @@ erDiagram
         int BaseUnitId FK
     }
 
+    PRODUCTVARIANT {
+        int Id PK
+        int ProductId FK
+        string Name
+        string SKU
+        bool IsDefault
+    }
+
     PRODUCTUNIT {
         int Id PK
         string Name
-        string SKU
-        int ProductId FK
+        int ProductVariantId FK
         int UnitId FK
         decimal Multiplier
         bool IsDefault
@@ -89,7 +96,8 @@ erDiagram
     %% Relationships
     
     
-    PRODUCT ||--|{ PRODUCTUNIT : "ProductId"
+    PRODUCT ||--|{ PRODUCTVARIANT : "ProductId"
+    PRODUCTVARIANT ||--|{ PRODUCTUNIT : "ProductVariantId"
 
     UNIT ||--|{ PRODUCTUNIT : "UnitId"
     UNIT ||--|{ PRODUCT : "BaseUnitId"
