@@ -40,7 +40,9 @@
 - Improves purchase order accuracy and validation
 
 ---
-[Example Sales Flow](SalesFlow.md)
+- [Example of Sales Flow](SalesFlow.md)
+- [Example of Purchase Flow](PurchaseFlow.md)
+
 
 ## Core Rules
 
