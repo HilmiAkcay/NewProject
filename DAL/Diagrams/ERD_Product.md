@@ -22,6 +22,7 @@ erDiagram
         int UnitId FK
         decimal Multiplier
         bool IsDefault
+        int UsageType "SALES | PURCHASE | BOTH | INVENTORY"
     }
 
     UNIT { 
