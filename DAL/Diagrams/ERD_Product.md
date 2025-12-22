@@ -89,6 +89,7 @@ erDiagram
         int ProductUnitId FK
         int AccountId FK "Supplier"
         decimal MinOrderQty
+        decimal MaxOrderQty
         decimal OrderMultiple
         bool AllowPartial
     }
