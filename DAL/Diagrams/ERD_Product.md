@@ -1,28 +1,55 @@
-# Product
+# Product Design Notes
 
-#### Appendix
-P: PROSS\
-C: CONS
+## Differences from PurePOS
 
-### Differences from the PurePOS
-##### Single Sellable entity.
-P: Speed up Coding (almost 30% decreases development time)\
-P: Increases the performance of the application\ 
-P: 
-##### Single Price principle, keep NET or GROSS price.
-P: Solves Excl - Incl conversion mistakes.
-##### Seperation of Sales and Purchase Price.
-P: Smaller data size.\
-P: Flexible to B2B and B2C.
-##### Different level Rounding Rule.
-P: Flexible\
-P: Easy for Finance Integration
-##### Purchase Rules.
-: Flexiable to define rules for each vendor.
-  
-### Rules
-- Each Product must have default variant (simpliefies query database, increase the peorformence)
-- SKU (Stock Keeping Unit) will be unique.
+### Single Sellable Entity
+**Pros**
+- Speeds up development (≈30% reduction in coding effort)
+- Improves overall application performance
+- Simplifies querying and data flow
+
+---
+
+### Single Price Principle (NET *or* GROSS)
+**Pros**
+- Prevents tax-excluded vs tax-included conversion errors
+- Ensures consistent pricing logic across the system
+
+---
+
+### Separation of Sales and Purchase Prices
+**Pros**
+- Reduces data complexity and storage size
+- Enables flexible pricing for both B2B and B2C scenarios
+- Protects margin calculations
+
+---
+
+### Multi-Level Rounding Rules
+**Pros**
+- Flexible rounding at line, receipt, and payment levels
+- Easier integration with accounting and finance systems
+- Compliant with different fiscal regulations
+
+---
+
+### Purchase Rules per Vendor
+**Pros**
+- Allows supplier-specific ordering constraints
+- Supports minimum, maximum, and multiple order quantities
+- Improves purchase order accuracy and validation
+
+---
+[Example Sales Flow](SalesFlow.md)
+
+## Core Rules
+
+- Every product must have **one default variant**  
+  *Simplifies database queries and improves performance.*
+
+- **SKU (Stock Keeping Unit) must be unique**  
+  *Ensures unambiguous product identification across systems.*
+
  
 ## ERD Diagram
 ```mermaid
