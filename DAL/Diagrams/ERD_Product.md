@@ -1,4 +1,30 @@
-﻿# Product ERD
+# Product
+
+#### Appendix
+P: PROSS\
+C: CONS
+
+### Differences from the PurePOS
+##### Single Sellable entity.
+P: Speed up Coding (almost 30% decreases development time)\
+P: Increases the performance of the application\ 
+P: 
+##### Single Price principle, keep NET or GROSS price.
+P: Solves Excl - Incl conversion mistakes.
+##### Seperation of Sales and Purchase Price.
+P: Smaller data size.\
+P: Flexible to B2B and B2C.
+##### Different level Rounding Rule.
+P: Flexible\
+P: Easy for Finance Integration
+##### Purchase Rules.
+: Flexiable to define rules for each vendor.
+  
+### Rules
+- Each Product must have default variant (simpliefies query database, increase the peorformence)
+- SKU (Stock Keeping Unit) will be unique.
+ 
+## ERD Diagram
 ```mermaid
 erDiagram
     PRODUCT {
@@ -64,6 +90,7 @@ erDiagram
         int Id PK
         int ProductUnitId FK
         string Barcode
+        decimal Qty
         bool IsDefault
     }
 
