@@ -71,7 +71,6 @@ erDiagram
         int Id PK
         string Code            "HALF_UP, CASH_0_05, NONE"
         decimal Precision       "2, 0.05, 0.01"
-        string AppliesTo       "LINE, RECEIPT, PAYMENT"
     }
 
     CALCULATIONPOLICY {
@@ -79,9 +78,9 @@ erDiagram
         string Code
         int PriceType          "GROSS | NET"
         int TaxCalcLevel       "LINE | RECEIPT"
-        int LineRoundingRuleId FK
-        int ReceiptRoundingRuleId FK
-        int CashRoundingRuleId FK
+        int LineRoundingRuleId FK "Round Excl to incl"
+        int ReceiptRoundingRuleId FK "Round Receipt total" 
+        int CashRoundingRuleId FK "round when paid with cash"
     }
 
     PURCHASEUNITRULE {
