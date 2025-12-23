@@ -2,50 +2,105 @@
 ```mermaid
 erDiagram
 
-ACCOUNTADDRESS {
-        int Id PK
-        int AccountId
-        string AddressType
-        string AddressLine1
-        string AddressLine2
-        string City
-        string State
-        int CountryId
-        string PostalCode
-    }
-
- ACCOUNT {
+    CUSTOMER {
         int Id PK
         string Code
         string Name
-        string TaxNumber "Nullable"
-        string VATNumber "Nullable" 
-        int CurrencyId
-        int PaymentTermDays
-        string IBAN "Nullable"
-        string BankName "Nullable"
-        bool TaxExempt
+        string Type          "ANONYMOUS | RETAIL | B2B | MARKETPLACE"
+        int SalesChannelId FK "Nullable"
+        string TaxNumber     "Nullable"
+        string Email         "Nullable"
+        string Phone         "Nullable"
+        int PriceGroupId FK  "Nullable" 
     }
 
- ACCOUNTGROUP { int Id PK string Name }
-
- ACCOUNTGROUPACCOUNT { int Id PK int AccountId int AccountGroupId }
-
- ACCOUNTCONTACT {
+    CUSTOMERPRICEGROUP {
         int Id PK
-        int AccountId
-        string ContactName
+        string Code
+        string Description
+        int CalculationPolicyId FK
+    }
+
+    SALESCHANNEL {
+        int Id PK
+        string Code          "POS | WEB | WOO | TOPSLIJTER"
+        string Name
+        int DefaultCalculationPolicyId FK
+        int DefaultCurrencyId FK
+    }
+
+    TAG {
+        int Id PK
+        string Code
+        string Name
+    }
+
+    CUSTOMERTAG {
+        int CustomerId FK
+        int TagId FK
+    }
+
+    VENDORTAG {
+        int VendorId FK
+        int TagId FK
+    }
+
+    CUSTOMERADDRESS {
+        int CustomerId FK
+        int AddressId FK
+    }
+
+    VENDORADDRESS {
+        int VendorId FK
+        int AddressId FK
+    }
+
+    ADDRESS{
+        int Id PK
+        string Name
+        int CountryId
+        string Type           "INVOICE | DELIVERY"
+        string City
+        string Street
+        string PostalCode
+        string HouseNumber
+        string Email         "Nullable"
+        string Phone         "Nullable"
+    }
+                
+
+   
+    %% =========================
+    %% VENDOR (SUPPLIER)
+    %% =========================
+
+    VENDOR {
+        int Id PK
+        string Code
+        string Name
+        string TaxNumber
+        int CurrencyId FK
+        int DefaultTaxRateId FK
+        int DefaultCalculationPolicyId FK
+    }
+
+    VENDORCONTACT {
+        int Id PK
+        int VendorId FK
+        string Name
         string Email
         string Phone
-        string ContactType
     }
 
-    ACCOUNT ||--o{ ACCOUNTCONTACT : "AccountId"
-    ACCOUNT ||--o{ ACCOUNTADDRESS : "AccountId"
-    ACCOUNT ||--o{ ACCOUNTGROUPACCOUNT : "AccountId"
+    VENDOR ||--o{ VENDORADDRESS : VendorId
+    VENDOR ||--o{ VENDORCONTACT : VendorId
+    VENDOR ||--o{ VENDORTAG : VendorId
+    CUSTOMER ||--o{ CUSTOMERADDRESS : CustomerId
+    CUSTOMER ||--o{ CUSTOMERTAG : CustomerId
+    CUSTOMERPRICEGROUP ||--o{ CUSTOMER : PriceGroupId
+    SALESCHANNEL ||--o{ CUSTOMER : SalesChannelId
+    TAG ||--o{ CUSTOMERTAG :TagId
+    TAG ||--o{ VENDORTAG :TagId
 
-    ACCOUNTGROUPACCOUNT ||--|| ACCOUNT : "AccountId"
-    ACCOUNTGROUPACCOUNT ||--|| ACCOUNTGROUP : "AccountGroupId"
-
-    
-
+    ADDRESS ||--o{CUSTOMERADDRESS : AddressId
+    ADDRESS ||--o{VENDORADDRESS : AddressId
