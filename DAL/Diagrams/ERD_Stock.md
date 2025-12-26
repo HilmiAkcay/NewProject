@@ -1,6 +1,7 @@
 ﻿# Stock ERD
 
 [Check Stock Process Rules](StockRules.md)
+[Check Stock Flow](StockFlow.md)
  
 ```mermaid
 erDiagram
