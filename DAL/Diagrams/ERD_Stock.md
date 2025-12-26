@@ -1,4 +1,7 @@
 ﻿# Stock ERD
+
+[Check Stock Process Rules](StockRules.md)
+ 
 ```mermaid
 erDiagram
 WAREHOUSE {
