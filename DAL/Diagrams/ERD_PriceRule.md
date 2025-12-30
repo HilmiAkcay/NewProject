@@ -1,22 +1,10 @@
+# PriceRule Diagram
+
 ### “What should the base sales price be before promotions?”
+- [All Possible Rules](PriceRuleRules.md)
+- [Developer CheckList](PriceRule_Developer.md)
 
-## PriceRule Resolution Order (Strict)
-
-When resolving a price for a **ProductUnit**, rules are evaluated in the following order.  
-The **first applicable rule wins**. No stacking is allowed.
-
- ScopeTypes below
-
-1. **PRODUCTUNIT** *(most specific)*
-2. **PRODUCTVARIANT**
-3. **PRODUCT**
-4. **PRICE_GROUP**
-5. **CUSTOMER**
-6. **GLOBAL** *(optional, fallback only)*
-
-> Pricing is always **resolved at ProductUnit level**, even when a rule is defined higher in the hierarchy.
-
-
+  
 ```mermaid
 erDiagram
 
