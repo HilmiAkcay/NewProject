@@ -14,7 +14,6 @@ erDiagram
         int Priority
         datetime ValidFrom
         datetime ValidTo
-        boolean IsActive
     }
 
     PriceRuleScope {
