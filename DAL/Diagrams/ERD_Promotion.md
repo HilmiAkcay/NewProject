@@ -12,7 +12,7 @@ erDiagram
     Promotion ||--o{ PromoAction : executes
     Promotion ||--o{ PromoUsageLog : tracked_by
     Promotion ||--o{ PromotionCustomer : limited_to
-    Promotion ||--o{ PromotionProductUnit : limited_to
+    Promotion ||--o{ PromotionProductUnit : targets
 
     Promotion {
         int Id PK
@@ -20,6 +20,7 @@ erDiagram
         string Name
         string Type "B2C_PROMO | B2B_AGREEMENT"
         boolean IsStackable
+        boolean IsExclusive
         datetime StartDate
         datetime EndDate
         string Status "Draft | Active | Paused | Expired"
@@ -40,7 +41,7 @@ erDiagram
         string ActionType 
         int TargetProductUnitId FK "Nullable"
         decimal Value
-        decimal MaxAmount "nullable"
+        decimal MaxAmount "Nullable"
     }
 
     PromoUsageLog {
