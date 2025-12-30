@@ -21,8 +21,6 @@ The **first applicable rule wins**. No stacking is allowed.
 erDiagram
 
     PriceRule ||--o{ PriceRuleScope : applies_to
-    ProductCost ||--|| Product : defines
-    Product ||--o{ PriceRuleScope : referenced_by
 
     PriceRule {
         uuid Id PK
@@ -38,17 +36,4 @@ erDiagram
         uuid PriceRuleId FK
         string ScopeType "PRODUCT | CATEGORY | BRAND | PRICE_GROUP | CUSTOMER"
         uuid ScopeId
-    }
-
-    ProductCost {
-        uuid ProductId PK
-        decimal CostPrice
-        datetime ValidFrom
-    }
-
-    Product {
-        uuid Id PK
-        string Name
-        string CategoryId
-        string BrandId
     }
