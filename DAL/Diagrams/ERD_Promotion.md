@@ -1,4 +1,4 @@
-
+```mermaid
 erDiagram
 
     Promotion ||--o{ PromoCondition : has
