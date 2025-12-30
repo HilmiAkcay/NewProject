@@ -333,6 +333,235 @@ These are **explicitly NOT allowed** as PriceRules:
 - Promotions apply **after** PriceRule
 - Finance owns PriceRule definitions
 
+# PriceRule Validation Matrix
+
+This matrix defines **what is allowed and what is forbidden** when creating or evaluating `PriceRule`s.
+
+Any violation must be **rejected at write-time**, not at runtime.
+
+---
+
+## 1. RuleType × ScopeType Validation
+
+| RuleType | PRODUCT | PRODUCTVARIANT | PRODUCTUNIT | PRICE_GROUP | CUSTOMER | GLOBAL |
+|--------|---------|----------------|-------------|-------------|----------|--------|
+| **MARGIN** | ✅ | ✅ | ✅ | ✅ | ❌ | ✅ |
+| **FIXED_PRICE** | ❌ | ❌ | ✅ | ✅ | ✅ | ❌ |
+| **BASE_ADJUSTMENT** | ❌ | ❌ | ❌ | ✅ | ✅ | ❌ |
+| **COST_PLUS_FIXED** | ❌ | ❌ | ✅ | ❌ | ✅ | ❌ |
+| **PRICE_FLOOR** | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
+| **PRICE_CEILING** | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
+| **COST_MATCH** | ❌ | ❌ | ❌ | ✅ | ✅ | ❌ |
+| **ROUNDING_OVERRIDE** | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
+| **GLOBAL_DEFAULT** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+
+Legend:
+- ✅ Allowed
+- ❌ Forbidden (must hard-fail)
+
+---
+
+## 2. Scope Hierarchy Validation
+
+Rules may be defined broadly but are **always resolved at PRODUCTUNIT level**.
+
+Allowed inheritance paths:
+
+GLOBAL
+↓
+PRODUCT
+↓
+PRODUCTVARIANT
+↓
+PRODUCTUNIT
+
+
+Invalid inheritance:
+- PRODUCTUNIT → PRODUCT
+- CUSTOMER → PRODUCT
+- PRICE_GROUP → PRODUCTUNIT (direct override without hierarchy)
+
+---
+
+## 3. Rule Stacking Validation
+
+| Scenario | Allowed |
+|-------|--------|
+| Multiple PriceRules applicable | ❌ |
+| First match by priority wins | ✅ |
+| Explicit stacking | ❌ |
+| Promotion after PriceRule | ✅ |
+
+**Hard rule:**  
+> Exactly **one** PriceRule must be selected per ProductUnit.
+
+---
+
+## 4. Time Validity Validation
+
+| Rule | Validation |
+|----|-----------|
+| ValidFrom > ValidTo | ❌ Reject |
+| Overlapping rules (same scope & priority) | ❌ Reject |
+| No active rule found | ⚠️ Use GLOBAL_DEFAULT |
+
+---
+
+## 5. Value Constraints
+
+### MARGIN
+- Range: `0% ≤ Margin ≤ 100%`
+- Negative margins forbidden
+
+### BASE_ADJUSTMENT
+- Range: `-20% ≤ Adjustment ≤ +20%`
+- Must not reduce price below cost
+
+### FIXED_PRICE
+- Must be ≥ CostPrice unless explicitly allowed
+- Currency must match Sales context
+
+### PRICE_FLOOR
+- Must be ≤ FIXED_PRICE (if both exist)
+
+### PRICE_CEILING
+- Must be ≥ PRICE_FLOOR
+
+---
+
+## 6. Customer Abuse Prevention Rules
+
+| Scenario | Result |
+|-------|--------|
+| CUSTOMER + BASE_ADJUSTMENT | ⚠️ Finance approval required |
+| CUSTOMER + MARGIN | ❌ Forbidden |
+| CUSTOMER overrides PRICE_GROUP | ❌ Unless explicitly flagged |
+| Visible discount label | ❌ Forbidden |
+
+---
+
+## 7. Promotion Boundary Enforcement
+
+PriceRules MUST NOT:
+- Be temporary marketing campaigns
+- Be advertised
+- Be stackable
+- Have usage limits
+- Be customer-visible as discounts
+
+If any of the above is required → **use Promotion Engine instead**.
+
+---
+
+## 8. Audit & Traceability Requirements
+
+Every applied PriceRule must log:
+- RuleId
+- ScopeType
+- ScopeId
+- Resolution level
+- CostPrice used
+- Final BasePrice
+
+---
+
+## Final Enforcement Statement
+
+> If a PriceRule violates this matrix,  
+> **the system must refuse to save it**.
+
+# PriceRule Resolution Strategy  
+## Highest-to-Lowest (Price-Based Resolution)
+
+Instead of resolving PriceRules by **priority**, the system resolves them by **price outcome**.
+
+All applicable PriceRules are evaluated, and the **final base price is selected based on price ordering**.
+
+---
+
+## Core Rule
+
+> **For a given ProductUnit, evaluate all valid PriceRules and select the price according to strategy:**
+>
+> - **Highest price wins** (margin-protective mode)
+> - or **Lowest price wins** (customer-favorable mode)
+
+Only **one final price** is produced.
+
+---
+
+## Resolution Steps (Mandatory)
+
+1. Collect all applicable PriceRules across scopes:
+   - PRODUCTUNIT
+   - PRODUCTVARIANT
+   - PRODUCT
+   - PRICE_GROUP
+   - CUSTOMER
+   - GLOBAL
+
+2. For each rule:
+   - Calculate its resulting `BasePrice`
+   - Validate against cost & constraints
+
+3. Discard invalid prices:
+   - Below cost (unless explicitly allowed)
+   - Outside floor / ceiling rules
+
+4. Sort remaining prices:
+   - DESC → **Highest price wins**
+   - ASC → **Lowest price wins**
+
+5. Select the first result
+6. Stop — no stacking, no averaging
+
+---
+
+## Example (Highest Price Wins)
+
+| Rule Source | Rule Type | Calculated Price |
+|-----------|----------|------------------|
+| PRODUCT | Margin 30% | €10.40 |
+| PRICE_GROUP | Margin 25% | €10.00 |
+| CUSTOMER | Fixed Price | €9.50 |
+
+**Result:**  
+✅ €10.40 (highest)
+
+---
+
+## Example (Lowest Price Wins)
+
+Same inputs:
+
+**Result:**  
+✅ €9.50 (lowest)
+
+---
+
+## Mandatory Safeguards (Non-Negotiable)
+
+### 1. RuleType Compatibility
+Not all rule types are allowed in price-based resolution.
+
+| RuleType | Allowed |
+|--------|--------|
+| MARGIN | ✅ |
+| FIXED_PRICE | ✅ |
+| BASE_ADJUSTMENT | ⚠️ (must respect cost floor) |
+| PRICE_FLOOR | ✅ (acts as filter, not candidate) |
+| PRICE_CEILING | ✅ (acts as filter, not candidate) |
+| PROMOTION TYPES | ❌ |
+
+---
+
+### 2. Cost Protection Rule
+
+```text
+FinalBasePrice ≥ CostPrice
+
+
+
 
 
 
