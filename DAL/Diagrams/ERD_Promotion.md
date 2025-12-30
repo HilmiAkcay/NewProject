@@ -1,33 +1,57 @@
+
 erDiagram
-    PROMOTION ||--o{ PROMO_CONDITION : triggers_on
-    PROMOTION ||--o{ PROMO_ACTION : executes
-    PROMOTION ||--o{ PROMO_STORE_LINK : active_in
-    
-    PROMO_CONDITION {
-        uuid id PK
-        uuid promo_id FK
-        string match_type "MIN_QTY | EXACT_QTY | MULTIPLE_OF"
-        integer required_value "e.g., 6"
-        string scope "SKU | CATEGORY | BRAND | ALL"
-        uuid reference_id "ID of Product or Category"
+
+    Promotion ||--o{ PromoCondition : has
+    Promotion ||--o{ PromoAction : executes
+    Promotion ||--o{ PromoUsageLog : tracked_by
+    Promotion ||--o{ PromotionCustomer : limited_to
+    Promotion ||--o{ PromotionProduct : limited_to
+
+    Promotion {
+        uuid Id PK
+        string Code
+        string Name
+        string Type "B2C_PROMO | B2B_AGREEMENT"
+        int Priority
+        boolean IsStackable
+        datetime StartDate
+        datetime EndDate
+        string Status "Draft | Active | Paused | Expired"
+        datetime CreatedAt
     }
 
-    PROMO_ACTION {
-        uuid id PK
-        uuid promo_id FK
-        string calc_type "PERCENT | FIXED_AMOUNT | MARGIN_TARGET | GIFT"
-        decimal value "e.g., 10.0 or 50.0"
-        string apply_to "ALL_ITEMS | CHEAPEST | MOST_EXPENSIVE"
-        uuid gift_sku "Optional SKU for free items"
+    PromoCondition {
+        uuid Id PK
+        uuid PromotionId FK
+        string ConditionType "MIN_QTY | MIN_AMOUNT | PRODUCT | CATEGORY | BRAND | CUSTOMER | PRICE_GROUP"
+        string Operator "= | >= | IN"
+        string Value "string or JSON"
     }
 
-    PROMOTION {
-        uuid id PK
-        string name
-        string type "B2C_PROMO | B2B_AGREEMENT"
-        integer priority "Higher = overrides others"
-        boolean is_stackable
-        string customer_category "e.g., Cat 1, VIP, All"
-        datetime start_date
-        datetime end_date
+    PromoAction {
+        uuid Id PK
+        uuid PromotionId FK
+        string ActionType "PERCENT_DISCOUNT | FIXED_DISCOUNT | FREE_ITEM | FIXED_PRICE"
+        uuid TargetProductId FK "nullable"
+        decimal Value
+        decimal MaxAmount "nullable"
+    }
+
+    PromoUsageLog {
+        uuid Id PK
+        uuid PromotionId FK
+        uuid OrderId
+        uuid CustomerId
+        datetime UsedAt
+        decimal DiscountAmount
+    }
+
+    PromotionCustomer {
+        uuid PromotionId FK
+        uuid CustomerId FK
+    }
+
+    PromotionProduct {
+        uuid PromotionId FK
+        uuid ProductId FK
     }
