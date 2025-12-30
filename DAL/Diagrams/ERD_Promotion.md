@@ -1,5 +1,10 @@
+# Promotion Digram
+- [All Possible Flows](PromotionFlow.md)
+### Column Possible Values
 - ActionType: "PERCENT_DISCOUNT | FIXED_DISCOUNT | FREE_ITEM | FIXED_PRICE"
 - ConditionType: "MIN_QTY | MIN_AMOUNT | PRODUCT | CATEGORY | BRAND | CUSTOMER | PRICE_GROUP"
+- TargetProductUnitId: FK "nullable", leave null for category/brand/global"
+  
 ```mermaid
 erDiagram
 
@@ -7,14 +12,13 @@ erDiagram
     Promotion ||--o{ PromoAction : executes
     Promotion ||--o{ PromoUsageLog : tracked_by
     Promotion ||--o{ PromotionCustomer : limited_to
-    Promotion ||--o{ PromotionProduct : limited_to
+    Promotion ||--o{ PromotionProductUnit : limited_to
 
     Promotion {
         int Id PK
         string Code
         string Name
         string Type "B2C_PROMO | B2B_AGREEMENT"
-        int Priority
         boolean IsStackable
         datetime StartDate
         datetime EndDate
@@ -34,7 +38,7 @@ erDiagram
         int Id PK
         int PromotionId FK
         string ActionType 
-        int TargetProductUnitId FK "nullable"
+        int TargetProductUnitId FK "Nullable"
         decimal Value
         decimal MaxAmount "nullable"
     }
@@ -53,7 +57,7 @@ erDiagram
         int CustomerId FK
     }
 
-    PromotionProduct {
+    PromotionProductUnit {
         int PromotionId FK
         int ProductUnitId FK
     }
