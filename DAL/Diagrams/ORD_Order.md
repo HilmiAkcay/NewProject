@@ -18,7 +18,7 @@ OrderLine {
  string Barcode
  string Description
  decimal OrderedQuantity
- decimal UnitListAmount
+ decimal UnitBasePrice
  decimal UnitDepositAmount
  decimal TaxRate
  int PriceType
@@ -26,21 +26,37 @@ OrderLine {
 
 Order ||--|{ OrderLine : has
 
+%% ===============================
+%% ORDER PRICE ADJUSTMENTS (PREVIEW / INTENT)
+%% ===============================
+
 OrderPriceAdjustment {
  uuid Id PK
  uuid OrderId FK
+ uuid CurrencyId FK
  string Scope "ORDER | LINE | COMBO"
- uuid OrderLineId FK "nullable"
  decimal Value
  string ValueType "PERCENT | AMOUNT"
  string Reason
+ boolean IsManual
  int Priority
  datetime CreatedAt
 }
 
 Order ||--o{ OrderPriceAdjustment : has
-OrderLine ||--o{ OrderPriceAdjustment : may_target
 
+OrderPriceAdjustmentLine {
+ uuid Id PK
+ uuid OrderPriceAdjustmentId FK
+ uuid OrderLineId FK
+}
+
+OrderPriceAdjustment ||--|{ OrderPriceAdjustmentLine : defines
+OrderLine ||--o{ OrderPriceAdjustmentLine : participates_in
+
+%% ===============================
+%% FULFILLMENT (PHYSICAL FLOW)
+%% ===============================
 
 Fulfillment {
  uuid Id PK
@@ -62,6 +78,9 @@ Order ||--o{ Fulfillment : produces
 Fulfillment ||--|{ FulfillmentLine : contains
 OrderLine ||--o{ FulfillmentLine : fulfilled_by
 
+%% ===============================
+%% INVOICE (FINANCIAL TRUTH)
+%% ===============================
 
 Invoice {
  uuid Id PK
@@ -82,16 +101,21 @@ InvoiceLine {
 Invoice ||--|{ InvoiceLine : contains
 FulfillmentLine ||--o{ InvoiceLine : invoiced_from
 
+%% ===============================
+%% INVOICE DISCOUNTS (FINAL, IMMUTABLE)
+%% ===============================
 
 InvoiceDiscount {
  uuid Id PK
  uuid InvoiceId FK
+ uuid CurrencyId FK
  string Source "MANUAL | PROMOTION"
  uuid SourceRefId
  string Scope "ORDER | LINE | COMBO"
  decimal DiscountAmount
  string Description
  int Priority
+ string AppliedRuleSnapshot "JSON"
  datetime CreatedAt
 }
 
