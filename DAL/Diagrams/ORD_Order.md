@@ -1,4 +1,3 @@
-
 ```mermaid
 erDiagram
 
@@ -19,13 +18,28 @@ OrderLine {
  string Barcode
  string Description
  decimal OrderedQuantity
- decimal UnitAmount
+ decimal UnitListAmount
  decimal UnitDepositAmount
  decimal TaxRate
  int PriceType
 }
 
 Order ||--|{ OrderLine : has
+
+OrderPriceAdjustment {
+ uuid Id PK
+ uuid OrderId FK
+ string Scope "ORDER | LINE | COMBO"
+ uuid OrderLineId FK "nullable"
+ decimal Value
+ string ValueType "PERCENT | AMOUNT"
+ string Reason
+ int Priority
+ datetime CreatedAt
+}
+
+Order ||--o{ OrderPriceAdjustment : has
+OrderLine ||--o{ OrderPriceAdjustment : may_target
 
 
 Fulfillment {
@@ -49,22 +63,6 @@ Fulfillment ||--|{ FulfillmentLine : contains
 OrderLine ||--o{ FulfillmentLine : fulfilled_by
 
 
-Stock {
- uuid ProductUnitId PK
- decimal PhysicalQuantity
-}
-
-StockReservation {
- uuid Id PK
- uuid OrderLineId FK
- uuid ProductUnitId FK
- decimal ReservedQuantity
-}
-
-OrderLine ||--o{ StockReservation : reserves
-Stock ||--o{ StockReservation : allocated_from
-
-
 Invoice {
  uuid Id PK
  uuid OrderId FK
@@ -77,8 +75,34 @@ InvoiceLine {
  uuid InvoiceId FK
  uuid FulfillmentLineId FK
  decimal Quantity
- decimal UnitAmount
+ decimal NetUnitAmount
+ decimal TaxRate
 }
 
 Invoice ||--|{ InvoiceLine : contains
 FulfillmentLine ||--o{ InvoiceLine : invoiced_from
+
+
+InvoiceDiscount {
+ uuid Id PK
+ uuid InvoiceId FK
+ string Source "MANUAL | PROMOTION"
+ uuid SourceRefId
+ string Scope "ORDER | LINE | COMBO"
+ decimal DiscountAmount
+ string Description
+ int Priority
+ datetime CreatedAt
+}
+
+Invoice ||--o{ InvoiceDiscount : applies
+
+InvoiceDiscountLine {
+ uuid Id PK
+ uuid InvoiceDiscountId FK
+ uuid InvoiceLineId FK
+ decimal AllocatedAmount
+}
+
+InvoiceDiscount ||--|{ InvoiceDiscountLine : allocates
+InvoiceLine ||--o{ InvoiceDiscountLine : discounted_by
