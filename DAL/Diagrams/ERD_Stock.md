@@ -5,50 +5,52 @@
  
 ```mermaid
 erDiagram
+
 WAREHOUSE {
-        int Id PK
+        uuid Id PK
         string Code
         string Name
         string Type "Central | Shop | Virtual"
     }
 
 STOCKRESERVATION {
-        int Id PK
-        int ProductVariantId FK
-        int WarehouseId FK
+        uuid Id PK
+        uuid ProductUnitId FK
+        uuid WarehouseId FK
         decimal Quantity
-        string Status "Active | Released | Consumed"
-        string SourceType "Order | ServiceRequest"
-        int SourceId
-        int SourceLineId
+        string Status "Active | Released"
+        uuid OrderLineId FK
     }
 
  STOCKFORM {
-        int Id PK
+        uuid Id PK
         string FormType "Transfer | Purchase | Fulfillment | Return | Adjustment | Manual"
-        int FromWarehouseId FK "Nullable"
-        int ToWarehouseId FK "Nullable"
+        uuid FromWarehouseId FK "Nullable"
+        uuid ToWarehouseId FK "Nullable"
         string Status "Draft | Approved | Completed | Cancelled"
     }
 
 STOCKFORMLINE {
-        int Id PK
-        int StockFormId FK
-        int ProductVariantId FK
-        int ProductUnitId FK
+        uuid Id PK
+        uuid StockFormId FK
+        uuid ProductUnitId FK
         decimal Quantity
     }
 
 STOCKMOVEMENT {
-        int Id PK
-        int ProductVariantId FK
-        int WarehouseId FK
+        uuid Id PK
+        uuid ProductUnitId FK
+        uuid WarehouseId FK
         decimal Quantity "+/-"
-        string MovementType "Purchase | Fulfillment | TransferIn | TransferOut | Adjustment | Return"
-        string SourceType "StockForm | Manual | ServiceRequest"
-        int SourceId
-        int SourceLineId
+        uuid StockFormId FK
+        uuid StockFormLineId FK
     }
+
+STOCKBALANCE {
+ uuid ProductUnitId PK
+ uuid WarehouseId PK
+ decimal PhysicalQuantity
+}
 
 WAREHOUSE ||--o{ STOCKRESERVATION : "has"
    
