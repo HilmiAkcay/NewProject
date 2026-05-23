@@ -1,0 +1,14 @@
+
+flowchart TD
+
+A[Input Basket] --> B[Filter Promotions]
+B --> C[Eligible Promotions]
+
+C --> D[Simulate Each Promotion]
+D --> E[Calculate Final Prices]
+
+E --> F[Conflict Resolution]
+F --> G[Select Best Result]
+
+G --> H[Apply to Order]
+H --> I[Write Snapshot + Logs]
