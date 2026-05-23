@@ -1,4 +1,4 @@
-
+```mermaid
 flowchart TD
 
 A[Input Basket] --> B[Filter Promotions]
