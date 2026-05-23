@@ -1,5 +1,12 @@
 ```mermaid
+
 flowchart TD
+
+style HS fill:#4CAF50,color:#fff,stroke:#2E7D32
+style B fill:#2196F3,color:#fff,stroke:#1565C0
+style C fill:#FF9800,color:#fff,stroke:#E65100
+style D fill:#9C27B0,color:#fff,stroke:#4A148C
+HS["Allocate inventory per order line"]:::note
     %% ===============================
     %% ORDER CREATION
     %% ===============================
@@ -12,11 +19,13 @@ flowchart TD
     F --> G{Order Complete?}
     G -->|No| E
     G -->|Yes| H[Finalize Order]
+    H -->HS["Reserve Stock"]
+
     
     %% ===============================
     %% FULFILLMENT
     %% ===============================
-    H --> I[Generate Fulfillment]
+    HS --> I[Generate Fulfillment]
     I --> J[Pick Items]
     J --> K[Collect Items]
     K --> L[Package Items]
